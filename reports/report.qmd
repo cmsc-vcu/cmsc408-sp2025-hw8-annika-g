@@ -121,13 +121,20 @@ drop table if exists wdi_country;
 ```{python}
 # create table
 execute_ddl(cnx,"""
+create table wdi_country as
+  select *
+  from world_bank_data.wdi_country
+  where `Region` is not null and `Region` != '';
 """)
 ```
 
 ```{python}
 # show number of records
 run_sql_and_return_html(cnx,"""
-select "doh!" as "Homer says ..." from dual
+select
+    count(*) as "Row Count in New Table"
+  from
+    wdi_country;
 """)
 ```
 
@@ -139,7 +146,10 @@ According to the World Bank, in 2020 there were how many countries in the world?
 ## (skills: select, aggregate)
 
 run_sql_and_return_html(cnx,"""
-select "doh!" as "Homer says ..." from dual
+select
+    count(*) as "Number of Countries"
+  from
+    wdi_country;
 """)
 
 ```
@@ -156,7 +166,12 @@ What are all unique values of region in the wdi_country table?
 ## (skills: select, aggregate, order by)
 
 run_sql_and_return_html(cnx,"""
-select "doh!" as "Homer says ..." from dual
+select distinct
+    `Region` -- Using correct column name
+  from
+    wdi_country
+  order by
+    `Region`;
 """)
 
 ```
