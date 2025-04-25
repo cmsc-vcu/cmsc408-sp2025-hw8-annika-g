@@ -545,15 +545,13 @@ with AllRegions as (
 run_sql_and_return_html(cnx, """
 WITH RegionIncomeCounts AS (
   SELECT
-    `Region`,
-    `Income Group`,
+    COALESCE(`Region`, 'Unknown') AS `Region`,
+    COALESCE(`Income Group`, 'Unknown') AS `Income Group`,
     COUNT(*) AS `Country Count`
   FROM
     wdi_country
-  WHERE
-    `Region` IS NOT NULL AND `Income Group`IS NOT NULL
   GROUP BY
-    `Region`, `Income Group`
+    COALESCE(`Region`, 'Unknown'), COALESCE(`Income Group`, 'Unknown')
 )
 SELECT
   `Region`,
