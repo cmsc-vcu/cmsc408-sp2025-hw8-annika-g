@@ -552,7 +552,6 @@ WITH RegionIncomeCounts AS (
     wdi_country
   WHERE
     `Region` IS NOT NULL AND `Region` != ''
-    AND `Income Group` IS NOT NULL AND `Income Group` != ''
   GROUP BY
     `Region`, `Income Group`
 )
@@ -560,13 +559,9 @@ SELECT
   `Region`,
   `Income Group`,
   `Country Count`,
-  -- Sum of counts for the current region partition
   SUM(`Country Count`) OVER (PARTITION BY `Region`) AS `Sum of Countries in Region`,
-  -- Sum of counts for the current income group partition
   SUM(`Country Count`) OVER (PARTITION BY `Income Group`) AS `Sum of Countries by Income`,
-  -- Sum of all counts (grand total)
   SUM(`Country Count`) OVER () AS `Total Sum Countries`,
-  -- Percentage of the grand total for this specific pair
   (`Country Count` * 100.0 / SUM(`Country Count`) OVER ()) AS `Percent of Total`
 FROM
   RegionIncomeCounts
@@ -632,7 +627,7 @@ with IncomeCategoryStats as (
     select
         `Income Group`,
         count(*) as "Country Count",
-        sum(count(*)) over () as "Total Countries"
+        cast(sum(count(*)) over () as signed) as "Total Countries"
     from
         wdi_country
     where
@@ -644,7 +639,7 @@ select
     `Income Group`,
     "Country Count",
     "Total Countries",
-    ("Country Count" * 100.0 / "Total Countries") as "Percentage"
+    ("Country Count" * 100.0 / nullif("Total Countries", 0)) as "Percentage"
 from
     IncomeCategoryStats
 order by
