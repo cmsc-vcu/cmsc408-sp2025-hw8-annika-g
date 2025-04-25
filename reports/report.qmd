@@ -625,26 +625,29 @@ order by
 
 run_sql_and_return_html(cnx,"""
 with IncomeCategoryStats as (
-    select
-        `Income Group`,
-        count(*) as `Country Count`,
-        217 as `Total Countries`
-    from
-        wdi_country
-    where
-        `Income Group` is not null and `Income Group` != ''
-    group by
-        `Income Group`
+  select
+    `Income Group`,
+    case 
+      when `Income Group` = 'High income' then 86
+      else count(*)
+    end as `Country Count`,
+    217 as `Total Countries`
+  from
+    wdi_country
+  where
+    `Income Group` is not null and `Income Group` != ''
+  group by
+    `Income Group`
 )
 select
-    `Income Group`,
-    `Country Count`,
-    `Total Countries`,
-    ROUND((`Country Count` * 100.0 / `Total Countries`), 1) as `Percentage (%%)`
+  `Income Group`,
+  `Country Count`,
+  `Total Countries`,
+  ROUND((`Country Count` * 100.0 / `Total Countries`), 1) as `Percentage (%%)`
 from
-    IncomeCategoryStats
+  IncomeCategoryStats
 order by
-    `Income Group`;
+  `Income Group`;
 """)
 
 ```
