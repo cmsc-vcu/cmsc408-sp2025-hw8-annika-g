@@ -657,26 +657,19 @@ order by
 
 1. Reflect on the SQL skills you used throughout these exercises. Which skills do you feel most confident in, and which do you think need more practice? How has this assignment helped you build or reinforce specific SQL competencies?
 
-( response goes here)
+I feel most confident in using basic SQL operations such as SELECT, WHERE, GROUP BY, and ORDER BY. These tasks reinforced my ability to write queries for data aggregation and filtering. However, I need more practice with advanced SQL concepts like CTEs and complex joins. This assignment helped me improve my understanding of these techniques and their applications in the real-world.
 
 2. Problem-Solving Approach: Describe your approach to tackling the more complex tasks (like Tasks 18, 23, and 24). How did you break down these problems, and what steps did you take when you encountered challenges? How would you approach a similar problem differently in the future?
 
-( response goes here)
+My approach to tackling the more complex tasks, such as Tasks 18, 23, and 24, involved breaking down the problem into smaller, manageable steps. First, I analyzed the requirements to understand the expected output. In Task 18, I used a combination of joins to generate all possible combinations and filter out the missing ones. When I encountered challenges, such as debugging errors or understanding the logic, I referred to documentation and iteratively refined the solution. In the future, I would approach similar problems by writing pseudocode to ensure clarity before diving into SQL coding to reduce trial-and-error debugging.
 
 
 3. Learning Takeaways: Consider the overall learning experience from this assignment. What were the biggest takeaways about working with SQL for data analysis and transformation? How do you think these skills will apply in real-world scenarios or future coursework?
 
-( response goes here)
+The biggest takeaways from this assignment were understanding how to use SQL for complex data analysis and transformation tasks. I learned how to approach problems, breaking them into smaller steps and leveraging SQL's different features. These skills are applicable in real-world scenarios, such as analyzing large datasets and generating reports. They will also be valuable in future coursework that involves database management and data science projects.
 
 
 # README
-
-A quality README is an important part of EVERY project. Using the Quarto *include* command we're including a copy of your README in the project report so that a human can evaluate it.
-
-Make sure that you edit the README so that it's explanatory!  Note that you don't need a readme within the *reports* folder for this assignment. We're only
-focused on the root *README.md*.
-
-[Here is some info](https://www.freecodecamp.org/news/how-to-write-a-good-readme-file/) on how to write a good README!
 
 ::: {style="background:lightgray; margin-left:20px; border-top: 3px solid black; border-bottom: 3px solid black; padding-left:20px; padding-right:20px"}
 {{< include ../README.md >}}
