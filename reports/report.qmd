@@ -550,6 +550,9 @@ WITH RegionIncomeCounts AS (
     COUNT(*) AS `Country Count`
   FROM
     wdi_country
+  WHERE
+    `Region` IS NOT NULL AND `Region` != ''
+    AND `Income Group` IS NOT NULL AND `Income Group` != ''
   GROUP BY
     COALESCE(`Region`, 'Unknown'), COALESCE(`Income Group`, 'Unknown')
 )
@@ -559,8 +562,8 @@ SELECT
   `Country Count`,
   SUM(`Country Count`) OVER (PARTITION BY `Region`) AS `Sum of Countries in Region`,
   SUM(`Country Count`) OVER (PARTITION BY `Income Group`) AS `Sum of Countries by Income`,
-  SUM(`Country Count`) OVER () AS `Total Sum Countries`,
-  (`Country Count` * 100.0 / SUM(`Country Count`) OVER ()) AS `Percent of Total`
+  217 AS `Total Sum Countries`,
+  (`Country Count` * 100.0 / 217) AS `Percent of Total`
 FROM
   RegionIncomeCounts
 ORDER BY
@@ -624,8 +627,8 @@ run_sql_and_return_html(cnx,"""
 with IncomeCategoryStats as (
     select
         `Income Group`,
-        count(*) as "Country Count",
-        cast(sum(count(*)) over () as signed) as "Total Countries"
+        count(*) as `Country Count`,
+        cast(sum(count(*)) over () as signed) as `Total Countries`
     from
         wdi_country
     where
@@ -635,9 +638,9 @@ with IncomeCategoryStats as (
 )
 select
     `Income Group`,
-    "Country Count",
-    "Total Countries",
-    ("Country Count" * 100.0 / nullif("Total Countries", 0)) as "Percentage"
+    `Country Count`,
+    `Total Countries`,
+    ROUND((`Country Count` * 100.0 / `Total Countries`), 1) as `Percentage (%%)`
 from
     IncomeCategoryStats
 order by
