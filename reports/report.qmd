@@ -259,8 +259,6 @@ select
     wdi_country
   where
     `2-alpha code` != `WB-2 code`
-     or `2-alpha code` is null
-     or `WB-2 code` is null
   order by
     `Short Name`;
 """)
@@ -321,16 +319,12 @@ select
 ## Write an update comment to correct the issue.
 ## NOTE - if you get this wrong, all subsequent tables will be wrong!
 
-update_sql = """
-  update wdi_country
+execute_ddl(cnx,"""
+  update `wdi_country`
   set `Income Group` = 'High income'
   where `Short Name` = 'Venezuela'
-    and (`Income Group` is null or `Income Group` = '');
-  """
-try:
-  execute_ddl(cnx, update_sql)
-except Exception as e:
-  print(f"Error executing update for Task 13: {e}")
+    and `Income Group` is NULL;
+""")
 
 ```
 ```{python}
@@ -342,7 +336,7 @@ select
     `Region`,
     `Income Group`
   from
-    wdi_country
+    `wdi_country`
   where
     `Short Name` = 'Venezuela';
 """)
@@ -397,7 +391,7 @@ select
     sum(case when `Income Group` = 'Upper middle income' then 1 else 0 end) as "Upper middle income",
     sum(case when `Income Group` = 'Lower middle income' then 1 else 0 end) as "Lower middle income",
     sum(case when `Income Group` = 'Low income' then 1 else 0 end) as "Low income",
-    count(*) as "Total"
+    count(*) * 1.0 as "Total"
   from
     wdi_country
   where
