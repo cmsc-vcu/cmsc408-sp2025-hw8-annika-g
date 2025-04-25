@@ -551,7 +551,7 @@ WITH RegionIncomeCounts AS (
   FROM
     wdi_country
   WHERE
-    `Region` IS NOT NULL AND `Region` != ''
+    `Region` IS NOT NULL AND `Income Group`IS NOT NULL
   GROUP BY
     `Region`, `Income Group`
 )
