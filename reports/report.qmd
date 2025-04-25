@@ -185,7 +185,15 @@ How many countries are in each region?
 ## (skills: select, aggregate, group by, order by)
 
 run_sql_and_return_html(cnx,"""
-select "doh!" as "Homer says ..." from dual
+select
+    `Region`,
+    count(*) as "Number of Countries"
+  from
+    wdi_country
+  group by
+    `Region`
+  order by
+    `Region`;
 """)
 
 ```
@@ -199,7 +207,15 @@ List the country full names and regions for all countries in north america.
 ## (skills: select, where, order by)
 
 run_sql_and_return_html(cnx,"""
-select "doh!" as "Homer says ..." from dual
+select
+    `Long Name`,
+    `Region`
+  from
+    wdi_country
+  where
+    `Region` = 'North America'
+  order by
+    `Long Name`;
 """)
 
 ```
@@ -212,7 +228,14 @@ select "doh!" as "Homer says ..." from dual
 ## (skills: select, where)
 
 run_sql_and_return_html(cnx,"""
-select "doh!" as "Homer says ..." from dual
+select
+    `Region`,
+    `Short Name`,
+    `Long Name`
+  from
+    wdi_country
+  where
+    `Short Name` = 'Qatar';
 """)
 
 ```
@@ -226,7 +249,20 @@ select "doh!" as "Homer says ..." from dual
 ## (skills: select, where, order by)
 
 run_sql_and_return_html(cnx,"""
-select "doh!" as "Homer says ..." from dual
+select
+    `Country Code`,
+    `Short Name`,
+    `2-alpha code`,
+    `WB-2 code`,
+    `Region`
+  from
+    wdi_country
+  where
+    `2-alpha code` != `WB-2 code`
+     or `2-alpha code` is null
+     or `WB-2 code` is null
+  order by
+    `Short Name`;
 """)
 
 ```
@@ -240,7 +276,15 @@ select "doh!" as "Homer says ..." from dual
 ## (skills: select, aggregate, group by, order by)
 
 run_sql_and_return_html(cnx,"""
-select "doh!" as "Homer says ..." from dual
+select
+    `Income Group`,
+    count(*) as "Number of Countries"
+  from
+    wdi_country
+  group by
+    `Income Group`
+  order by
+    "Number of Countries" DESC;
 """)
 
 ```
@@ -255,7 +299,16 @@ select "doh!" as "Homer says ..." from dual
 ## in the first column.
 
 run_sql_and_return_html(cnx,"""
-select "doh!" as "Homer says ..." from dual
+select
+    `Short Name`,
+    `Region`,
+    `Income Group`
+  from
+    wdi_country
+  where
+    `Income Group` is null or `Income Group` = ''
+  order by
+    `Short Name`;
 """)
 
 ```
@@ -268,16 +321,30 @@ select "doh!" as "Homer says ..." from dual
 ## Write an update comment to correct the issue.
 ## NOTE - if you get this wrong, all subsequent tables will be wrong!
 
-execute_ddl(cnx,"""
-""")
-
+update_sql = """
+  update wdi_country
+  set `Income Group` = 'High income'
+  where `Short Name` = 'Venezuela'
+    and (`Income Group` is null or `Income Group` = '');
+  """
+try:
+  execute_ddl(cnx, update_sql)
+except Exception as e:
+  print(f"Error executing update for Task 13: {e}")
 
 ```
 ```{python}
 ## Now, display the country again to verify the change stuck!
 
 run_sql_and_return_html(cnx,"""
-select "doh!" as "Homer says ..." from dual
+select
+    `Short Name`,
+    `Region`,
+    `Income Group`
+  from
+    wdi_country
+  where
+    `Short Name` = 'Venezuela';
 """)
 
 ```
@@ -291,7 +358,19 @@ select "doh!" as "Homer says ..." from dual
 ## (skills: select, aggregate, group by, order by)
 
 run_sql_and_return_html(cnx,"""
-select "doh!" as "Homer says ..." from dual
+select
+    `Region`,
+    `Income Group`,
+    count(*) as "no.of.countries"
+  from
+    wdi_country
+  where
+    `Income Group` is not null and `Income Group` != ''
+    and `Region` is not null and `Region` != ''
+  group by
+    `Region`, `Income Group`
+  order by
+    `Region`, `Income Group`;
 """)
 
 ```
@@ -312,7 +391,22 @@ select "doh!" as "Homer says ..." from dual
 ## (skills: select, aggregate, group by, nested query)
 
 run_sql_and_return_html(cnx,"""
-select "doh!" as "Homer says ..." from dual
+select
+    `Region`,
+    sum(case when `Income Group` = 'High income' then 1 else 0 end) as "High income",
+    sum(case when `Income Group` = 'Upper middle income' then 1 else 0 end) as "Upper middle income",
+    sum(case when `Income Group` = 'Lower middle income' then 1 else 0 end) as "Lower middle income",
+    sum(case when `Income Group` = 'Low income' then 1 else 0 end) as "Low income",
+    count(*) as "Total"
+  from
+    wdi_country
+  where
+      `Region` is not null and `Region` != ''
+      and `Income Group` is not null and `Income Group` != ''
+  group by
+    `Region`
+  order by
+    `Region`;
 """)
 
 ```
