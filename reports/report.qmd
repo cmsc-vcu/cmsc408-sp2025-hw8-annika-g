@@ -628,7 +628,7 @@ with IncomeCategoryStats as (
     select
         `Income Group`,
         count(*) as `Country Count`,
-        cast(sum(count(*)) over () as signed) as `Total Countries`
+        217 as `Total Countries`
     from
         wdi_country
     where
